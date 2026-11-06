@@ -34,68 +34,123 @@ Find how often each pixel value from 0 to 255 shows up in a photo, then spread t
 
 ## Program
 
-#### 1. Read the photo
+#### 1.
 
 ```python
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
-photo = cv2.imread("ramitha.png")
-gray = cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
 ```
 
-#### 2. Grayscale histogram and equalization
+#### 2.
 
 ```python
-hist_before = cv2.calcHist([gray], [0], None, [256], [0, 256])
-equalized = cv2.equalizeHist(gray)
-hist_after = cv2.calcHist([equalized], [0], None, [256], [0, 256])
+img = cv2.imread('ramitha.png', cv2.IMREAD_GRAYSCALE)
+```
 
-plt.figure(figsize=(10, 7))
-plt.subplot(2, 2, 1)
-plt.imshow(gray, cmap="gray")
-plt.title("Original Grayscale")
-plt.axis("off")
-plt.subplot(2, 2, 2)
-plt.imshow(equalized, cmap="gray")
-plt.title("Equalized Image")
-plt.axis("off")
-plt.subplot(2, 2, 3)
-plt.plot(hist_before, color="black")
-plt.title("Original Histogram")
-plt.xlim([0, 256])
-plt.subplot(2, 2, 4)
-plt.plot(hist_after, color="black")
-plt.title("Equalized Histogram")
-plt.xlim([0, 256])
-plt.tight_layout()
+#### 3.
+
+```python
+plt.imshow(img, cmap='gray')
+plt.title('Original Image')
 plt.show()
 ```
 
-#### 3. Histograms of the colour channels
+#### 4.
 
 ```python
-blue, green, red = cv2.split(photo)
-plt.figure(figsize=(8, 4))
-plt.plot(cv2.calcHist([blue], [0], None, [256], [0, 256]), color="blue")
-plt.plot(cv2.calcHist([green], [0], None, [256], [0, 256]), color="green")
-plt.plot(cv2.calcHist([red], [0], None, [256], [0, 256]), color="red")
-plt.title("Colour Channel Histograms")
-plt.xlim([0, 256])
-plt.tight_layout()
+plt.hist(img.ravel(),256,range = [0, 256]);
+plt.title('Original Image')
 plt.show()
+```
+
+#### 5.
+
+```python
+img_eq = cv2.equalizeHist(img)
+```
+
+#### 6.
+
+```python
+plt.hist(img_eq.ravel(), 256, range = [0, 256])
+plt.title('Equalized Histogram')
+```
+
+#### 7.
+
+```python
+plt.imshow(img_eq, cmap='gray')
+plt.title('Original Image')
+plt.show()
+```
+
+#### 8.
+
+```python
+img = cv2.imread('ramitha.png', cv2.IMREAD_COLOR)
+```
+
+#### 9.
+
+```python
+img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+```
+
+#### 10.
+
+```python
+img_hsv[:,:,2] = cv2.equalizeHist(img_hsv[:, :, 2])
+```
+
+#### 11.
+
+```python
+img_eq = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2BGR)
+```
+
+#### 12.
+
+```python
+plt.imshow(img_eq[:,:,::-1]); plt.title('Equalized Image');plt.show()
+```
+
+#### 13.
+
+```python
+plt.hist(img_eq.ravel(),256,range = [0, 256]); plt.title('Histogram Equalized');plt.show()
+```
+
+#### 14.
+
+```python
+plt.figure(figsize = (20,10))
+plt.subplot(221); plt.imshow(img[:, :, ::-1]); plt.title('Original Color Image')
+plt.subplot(222); plt.imshow(img_eq[:, :, ::-1]); plt.title('Equalized Image')
+plt.show()
+```
+
+#### 15.
+
+```python
+plt.figure(figsize = [15,4])
+plt.subplot(121); plt.hist(img.ravel(),256,range = [0, 256]); plt.title('Original Image')
+plt.subplot(122); plt.hist(img_eq.ravel(),256,range = [0, 256]); plt.title('Histogram Equalized')
 ```
 
 ## Output
 
-### i) Grayscale image and its equalization
+<img width="389" height="410" alt="Original Image" src="output/01-gray.png" />
 
-<img width="988" height="690" alt="Grayscale histogram and equalization" src="output/01-gray-equalize.png" />
+<img width="570" height="434" alt="Original histogram" src="output/02-hist.png" />
 
-### ii) Colour channel histograms
+<img width="570" height="434" alt="Equalized Histogram" src="output/03-eq-hist.png" />
 
-<img width="790" height="390" alt="Colour channel histograms" src="output/02-colour-hist.png" />
+<img width="389" height="410" alt="Equalized gray" src="output/04-eq-gray.png" />
+
+<img width="389" height="410" alt="Equalized Image" src="output/05-eq-color.png" />
+
+<img width="1252" height="414" alt="Original and equalized" src="output/06-compare.png" />
 
 ## Result
 
